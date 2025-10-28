@@ -1,5 +1,6 @@
-import { use, useState } from "react";
+import { use, useEffect, useState, useRef, useCallback } from "react";
 import "./App.css";
+import axios from "axios";
 //   1. На входе статичный массив чисел. Отобразить на странице только чётные числа, каждое в
 // теге <li>.
 // const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -998,3 +999,605 @@ import "./App.css";
 // }
 
 // export default App;
+
+// 1. При первичном рендеринге загрузите данные пользователя с https://jsonplaceholder.typicode.com/users/1 .
+// Отобразите информацию о пользователе в виде карточки. Внутри useState хранится объект пользователя с
+// сервера. Обработайте возможные ошибки при обращении к серверу.
+
+// function App() {
+//   const [a, b] = useState();
+//   async function getData() {
+//     const data = await axios.get(
+//       "https://jsonplaceholder.typicode.com/users/1"
+//     );
+//     b(data.data);
+//     console.log(data.data);
+//   }
+//   useEffect(() => {
+//     getData();
+//   }, []);
+//   return (
+//     <div>
+//       <div>{a.name}</div>
+//       <div>{a.email}</div>
+//       <div>{a.username}</div>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+// 2. При первичном рендеринге загрузите список постов с https://jsonplaceholder.typicode.com/posts .
+// Отобразите первые 10 постов в виде списка. Внутри useState хранится массив постов с сервера.
+
+// function App() {
+//   const [a, b] = useState([]);
+//   async function getData() {
+//     const data = await axios.get("https://jsonplaceholder.typicode.com/posts");
+//     b(data.data);
+//     console.log(data.data);
+//   }
+//   useEffect(() => {
+//     getData();
+//   }, []);
+//   let i = 0;
+//   return (
+//     <div>
+//       <ul>{a.map((el, i) => (i < 10 ? <li>{el.title}</li> : <></>))}</ul>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+// 3. На странице должны отображаться инпут и div c ответом сервера. При первичном рендеринге отправить
+// запрос на https://jsonplaceholder.typicode.com/albums?title_like=${query}. При вводе данных в инпут повторно
+// отправляйте запрос. Внутри useState хранится массив найденных альбомов. Отобразите результаты поиска
+// в виде сетки карточек. (В текущей задаче useEffect вызывает асинхронную функцию не только при
+// первичном рендеринге, но и при изменении состояния значения инпута)
+
+// function App() {
+//   const [a, b] = useState();
+//   const [serv, funcServ] = useState([]);
+//   useEffect(() => {
+//     getData();
+//   }, [a]);
+//   async function getData() {
+//     const data = await axios.get(
+//       `https://jsonplaceholder.typicode.com/albums?title_like=${a}`
+//     );
+//     funcServ(data.data);
+//   }
+//   return (
+//     <>
+//       <input
+//         onChange={(e) => {
+//           b(e.target.value);
+//         }}
+//       ></input>
+//       <div>
+//         {serv.map((el) => (
+//           <div>{el.title}</div>
+//         ))}
+//       </div>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 4. При первичном рендеринге отправить GET запрос по адресу https://api.ipify.org/?format=json . Результат
+// сервера отобразить в заголовок
+
+// function App() {
+//   const [a, b] = useState({});
+//   useEffect(() => {
+//     getData();
+//   });
+//   async function getData() {
+//     const data = await axios.get("https://api.ipify.org/?format=json");
+//     b(data.data);
+//   }
+//   return <>{a.ip}</>;
+// }
+
+// export default App;
+
+// 1. Создайте компонент, который предоставляет две кнопки: "Показать" и "Скрыть". При
+// нажатии на "Показать" отображается текст, а при нажатии на "Скрыть" текст скрывается.
+
+// function App() {
+//   const [a, f] = useState("none");
+//   return (
+//     <>
+//       <button
+//         onClick={() => {
+//           f("block");
+//         }}
+//       >
+//         Показать
+//       </button>
+//       <button
+//         onClick={() => {
+//           f("none");
+//         }}
+//       >
+//         Скрыть
+//       </button>
+//       <h1 style={{ display: a }}>HELLO</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 2. Создайте компонент выбора цвета, который включает 4шт. – button (в качестве textContent:
+// red, green, blue, yellow), 1шт. – h1 и позволяет пользователю выбирать цвет. По клику на
+// соответствующую кнопку цвет заголовка должен меняться.
+
+// function App() {
+//   const array = ["red", "green", "blue", "yellow"];
+//   const [a, f] = useState();
+//   return (
+//     <>
+//       <button
+//         onClick={() => {
+//           f(array[0]);
+//         }}
+//       >
+//         RED
+//       </button>
+//       <button
+//         onClick={() => {
+//           f(array[1]);
+//         }}
+//       >
+//         GREEN
+//       </button>
+//       <button
+//         onClick={() => {
+//           f(array[2]);
+//         }}
+//       >
+//         BLUE
+//       </button>
+//       <button
+//         onClick={() => {
+//           f(array[3]);
+//         }}
+//       >
+//         YELLOW
+//       </button>
+//       <h1 style={{ color: a }}>HELLO</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 3. Создайте компонент по клику на кнопку проверить значение введенного поля для ввода
+// регулярным выражением на почту. В console.log отобразить true если введенная строка
+// удовлетворяет регулярному выражению и false в противном случае.
+
+// function App() {
+//   const [a, b] = useState("");
+//   const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//   return (
+//     <>
+//       <input
+//         onChange={(e) => {
+//           b(e.target.value);
+//         }}
+//       ></input>
+//       <button
+//         onClick={() => {
+//           reg.test(a) ? console.log(true) : console.log(false);
+//         }}
+//       >
+//         Check
+//       </button>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 4. Отобразите список элементов массива, кнопку и поле для ввода. По клику на кнопку брать
+// значение инпута и добавлять в конец списка массива.
+
+// function App() {
+//   const [a, b] = useState("");
+//   const [d, f] = useState(["hi", "hello", "whatsup", "by"]);
+
+//   return (
+//     <>
+//       <input
+//         onChange={(e) => {
+//           b(e.target.value);
+//         }}
+//       ></input>
+//       <button
+//         onClick={() => {
+//           f([...d, a]);
+//         }}
+//       >
+//         Add
+//       </button>
+//       <ul>
+//         {d.map((el) => {
+//           return <li>{el}</li>;
+//         })}
+//       </ul>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 1. Создайте компонент счетчика, который увеличивает значение счетчика на 1 каждую секунду
+// с использованием useEffect.
+
+// function App() {
+//   const [a, b] = useState(0);
+//   useEffect(() => {
+//     const res = setInterval(() => b(a + 1), 1000);
+//     return () => clearInterval(res);
+//   }, [a]);
+
+//   return (
+//     <>
+//       <h1>{a}</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 2. Создайте компонент, который выполняет запрос к API https://api.ipify.org/?format=json и
+// отображает полученные данные в заголовок.
+
+// function App() {
+//   const [a, b] = useState("");
+//   async function response() {
+//     const getData = await axios.get("https://api.ipify.org/?format=json");
+//     console.log(getData.data.ip);
+
+//     b(getData.data.ip);
+//   }
+//   useEffect(() => {
+//     response();
+//   });
+//   return (
+//     <>
+//       <h1>{a}</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 3. Создайте компонент, который отображает текущее время и обновляет его каждую секунду.
+
+// function App() {
+//   const data = new Date();
+//   const time = data.toLocaleTimeString();
+//   const [a, b] = useState(time);
+//   useEffect(() => {
+//     const res = setInterval(() => {
+//       const data = new Date();
+//       b(data.toLocaleTimeString());
+//       return () => clearInterval(res);
+//     }, 1000);
+//   });
+//   return (
+//     <>
+//       <h1>{a}</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 4. Создайте компонент, который при первичном рендеринге отправляет запрос к API
+// http://numbersapi.com/:id с рандомно сгенерированным числом и отображает результат в
+// консоль.
+
+// function App() {
+//   async function response() {
+//     const getData = await axios.get(
+//       `http://numbersapi.com/${Math.floor(Math.random() * 10)}`
+//     );
+//     console.log(getData.data);
+//   }
+//   useEffect(response(), []);
+
+//   return <></>;
+// }
+
+// export default App;
+
+// 1. Создайте компонент, который по клику на кнопку меняет цвет текста на красный
+
+// function App() {
+//   const ref = useRef();
+//   return (
+//     <>
+//       <button
+//         onClick={() => {
+//           ref.current.style = "color: red;";
+//         }}
+//       >
+//         Click
+//       </button>
+//       <h ref={ref}>HELLO</h>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 2. Создайте компонент, который по клику на кнопку рандомно у h1 меняет цвет текста
+
+// function App() {
+//   const refColor = useRef();
+//   return (
+//     <>
+//       <button
+//         onClick={() => {
+//           refColor.current.style = `color: #${Math.round(Math.random() * 999)}`;
+//         }}
+//       >
+//         RANDOM
+//       </button>
+//       <h1 ref={refColor}>COLOR</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 3. Создайте компонент, который при каждом клике на кнопку увеличивает размер шрифта
+// текста в элементе на странице.
+
+// function App() {
+//   const refSize = useRef();
+//   return (
+//     <>
+//       <button
+//         onClick={() => {
+//           refSize.current.style = `font-size: ${
+//             parseInt(refSize.current.style.fontSize) + 1
+//           }px`;
+//         }}
+//       >
+//         CLICK
+//       </button>
+//       <p ref={refSize} style={{ fontSize: "36px" }}>
+//         Hello
+//       </p>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 4. Создайте компонент, который при фокусе на текстовом поле добавляет background
+// (onFocus, onBlur)
+
+// function App() {
+//   const refBack = useRef();
+//   return (
+//     <>
+//       <input
+//         ref={refBack}
+//         onFocus={() => {
+//           refBack.current.style = `background-color: red`;
+//         }}
+//         onBlur={() => {
+//           refBack.current.style = `background-color: white`;
+//         }}
+//       ></input>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 5. Реализуйте компонент, который отслеживает количество кликов на кнопку с помощью
+// useRef и выводит это число в консоль при каждом клике.
+
+// function App() {
+//   const ref = useRef();
+//   return (
+//     <>
+//       <button
+//         onClick={() => {
+//           ref.current.textContent = +ref.current.textContent + 1;
+//         }}
+//       >
+//         {" "}
+//         CLICK
+//       </button>
+//       <h1 ref={ref}>0</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 6. Разработайте компонент для реализации "подсказок" (tooltips). При наведении на элемент
+// интерфейса (например, кнопку), компонент отображает подсказку с текстом. (onMouseEnter
+// срабатывает, когда курсор мыши входит в область элемента. onMouseLeave срабатывает,
+// когда курсор мыши покидает область элемента.)
+
+// function App() {
+//   const ref = useRef();
+//   return (
+//     <>
+//       <button
+//         onMouseEnter={() => {
+//           ref.current.style.display = "block";
+//         }}
+//         onMouseOut={() => {
+//           ref.current.style = "display: none";
+//         }}
+//       >
+//         CLICK
+//       </button>
+//       <p ref={ref} style={{ display: "none" }}>
+//         HELLO
+//       </p>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 1. Создайте компонент с кнопкой "Увеличить счетчик". При каждом клике на кнопку счетчик
+// должен увеличиваться на 1. Используйте useCallback, чтобы оптимизировать обработчик
+// клика на кнопке.
+
+// function App() {
+//   const [a, b] = useState(0);
+//   const useCb = useCallback(() => {
+//     b(a + 1);
+//   }, [a]);
+//   return (
+//     <>
+//       <button onClick={useCb}>Увеличить счетчик</button>
+//       <p>{a}</p>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 2. Создайте компонент, который отображает список элементов с кнопками "Удалить". При
+// нажатии на кнопку элемент должен быть удален из списка. Используйте useCallback, чтобы
+// оптимизировать функцию удаления элемента.
+
+// function App() {
+//   const [a, b] = useState([1, 2, 3, 4, 5, 6]);
+//   const increment = useCallback(
+//     (indexRemove) => {
+//       b(a.filter((_el, index) => index !== indexRemove));
+//     },
+//     [a]
+//   );
+//   return (
+//     <>
+//       {a.map((el, index) => {
+//         return (
+//           <div key={index} style={{ display: "flex", marginLeft: "20px" }}>
+//             <li>{el}</li>
+//             <button
+//               style={{ marginLeft: "20px" }}
+//               onClick={() => {
+//                 increment(index);
+//               }}
+//             >
+//               Удалить
+//             </button>
+//           </div>
+//         );
+//       })}
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 3. Создайте компонент, который имеет кнопку "Изменить статус". При каждом клике на
+// кнопку статус компонента должен меняться между "Активный" и "Неактивный".
+// Используйте useCallback, чтобы оптимизировать функцию изменения статуса
+
+// function App() {
+//   const [a, b] = useState("Активный");
+//   const increment = useCallback(() => {
+//     a == "Активный" ? b("Неактивный") : b("Активный");
+//   });
+//   return (
+//     <>
+//       <button onClick={increment}>Изменить статус</button>
+//       <h3>{a}</h3>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 4. Создайте компонент, который предоставляет пользователю выбор цвета из списка. При
+// выборе цвета, компонент должен отображать выбранный цвет на странице. Используйте
+// useCallback, чтобы оптимизировать функцию выбора цвета.
+
+// function App() {
+//   const arr = ["white", "blue", "red", "green"];
+//   const [a, b] = useState("");
+//   const increment = useCallback((index_) => {
+//     b(arr[index_]);
+//   });
+//   return (
+//     <>
+//       {arr.map((el, index) => {
+//         return (
+//           <li
+//             style={{ backgroundColor: a }}
+//             key={index}
+//             onClick={() => {
+//               increment(index);
+//             }}
+//           >
+//             {el}
+//           </li>
+//         );
+//       })}
+//     </>
+//   );
+// }
+
+// export default App;
+
+// 5. Создайте компонент, который позволяет пользователю добавлять и удалять элементы из
+// списка. Используйте useCallback, чтобы оптимизировать функции добавления и удаления
+// элементов.
+
+function App() {
+  const ref = useRef();
+  const [arr, setArr] = useState([1, 2, 3, 4, 5]);
+  const increment = useCallback(
+    (index_) => {
+      setArr(arr.filter((el, index) => index !== index_));
+    },
+    [arr]
+  );
+  const addIncrement = useCallback(() => {
+    ref.current.value.trim() !== ""
+      ? setArr([...arr, ref.current.value])
+      : (ref.current.value = "");
+  }, [arr]);
+  return (
+    <div>
+      <input ref={ref} placeholder="Название элемента"></input>
+      <button onClick={addIncrement}>Добавить</button>
+      {arr.map((el, index) => {
+        return (
+          <div
+            key={index}
+            style={{ display: "flex", gap: "20px", marginTop: "20px" }}
+          >
+            <li>{el}</li>
+            <button
+              onClick={() => {
+                increment(index);
+              }}
+            >
+              Удалить
+            </button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export default App;
