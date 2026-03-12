@@ -1561,42 +1561,145 @@ import axios from "axios";
 // списка. Используйте useCallback, чтобы оптимизировать функции добавления и удаления
 // элементов.
 
+// function App() {
+//   const ref = useRef();
+//   const [arr, setArr] = useState([1, 2, 3, 4, 5]);
+//   const increment = useCallback(
+//     (index_) => {
+//       setArr(arr.filter((el, index) => index !== index_));
+//     },
+//     [arr],
+//   );
+//   const addIncrement = useCallback(() => {
+//     ref.current.value.trim() !== ""
+//       ? setArr([...arr, ref.current.value])
+//       : (ref.current.value = "");
+//   }, [arr]);
+//   return (
+//     <div>
+//       <input ref={ref} placeholder="Название элемента"></input>
+//       <button onClick={addIncrement}>Добавить</button>
+//       {arr.map((el, index) => {
+//         return (
+//           <div
+//             key={index}
+//             style={{ display: "flex", gap: "20px", marginTop: "20px" }}
+//           >
+//             <li>{el}</li>
+//             <button
+//               onClick={() => {
+//                 increment(index);
+//               }}
+//             >
+//               Удалить
+//             </button>
+//           </div>
+//         );
+//       })}
+//     </div>
+//   );
+// }
+
+// export default App;
+
+// function App() {
+//   const [state, setState] = useState(1);
+
+//   return (
+//     <>
+//       <button
+//         onClick={() => {
+//           !state ? setState(true) : setState(false);
+//         }}
+//       >
+//         {!state ? "Показать" : "Скрыть"}
+//       </button>
+//       <h1 style={!state ? { display: "none" } : { display: "block" }}>Hello</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// function App() {
+//   const [state, setState] = useState();
+
+//   return (
+//     <>
+//       <input
+//         onChange={(e) => {
+//           setState(e.target.value);
+//         }}
+//         type="text"
+//       ></input>
+//       <h1>{state}</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// function App() {
+//   const [state, setState] = useState(0);
+
+//   return (
+//     <>
+//       <button
+//         onClick={() => {
+//           setState(state + 1);
+//         }}
+//       >
+//         +1
+//       </button>
+//       <button
+//         onClick={() => {
+//           setState(state - 1);
+//         }}
+//       >
+//         -1
+//       </button>
+//       <h1>{state}</h1>
+//     </>
+//   );
+// }
+
+// export default App;
+
 function App() {
-  const ref = useRef();
-  const [arr, setArr] = useState([1, 2, 3, 4, 5]);
-  const increment = useCallback(
-    (index_) => {
-      setArr(arr.filter((el, index) => index !== index_));
-    },
-    [arr]
-  );
-  const addIncrement = useCallback(() => {
-    ref.current.value.trim() !== ""
-      ? setArr([...arr, ref.current.value])
-      : (ref.current.value = "");
-  }, [arr]);
+  const [inputValue, setInputValue] = useState("");
+  const refInp = useRef();
+  const [mail, setMail] = useState("");
+  const [state, setState] = useState(0);
+
   return (
-    <div>
-      <input ref={ref} placeholder="Название элемента"></input>
-      <button onClick={addIncrement}>Добавить</button>
-      {arr.map((el, index) => {
-        return (
-          <div
-            key={index}
-            style={{ display: "flex", gap: "20px", marginTop: "20px" }}
-          >
-            <li>{el}</li>
-            <button
-              onClick={() => {
-                increment(index);
-              }}
-            >
-              Удалить
-            </button>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <input
+        ref={refInp}
+        type="text"
+        onChange={(e) => {
+          setInputValue(e.target.value);
+        }}
+      ></input>
+      <button
+        onClick={() => {
+          setState(1);
+          setMail(inputValue);
+        }}
+      >
+        Отправить
+      </button>
+      <button
+        onClick={() => {
+          setState(0);
+          refInp.current.value = "";
+        }}
+      >
+        Очистить
+      </button>
+      <p style={!state ? { display: "none" } : { display: "block" }}>
+        Отправлено: {mail}
+      </p>
+    </>
   );
 }
 
